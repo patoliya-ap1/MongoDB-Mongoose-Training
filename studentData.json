@@ -1,0 +1,62 @@
+[
+  {
+    "name": "Amit Sharma",
+    "age": 22,
+    "email": "amit.sharma@example.com",
+    "course": "Computer Science"
+  },
+  {
+    "name": "Priya Patel",
+    "age": 21,
+    "email": "priya.patel@example.com",
+    "course": "Information Technology"
+  },
+  {
+    "name": "Rahul Verma",
+    "age": 23,
+    "email": "rahul.verma@example.com",
+    "course": "Mechanical Engineering"
+  },
+  {
+    "name": "Sneha Reddy",
+    "age": 20,
+    "email": "sneha.reddy@example.com",
+    "course": "Electronics"
+  },
+  {
+    "name": "Karan Mehta",
+    "age": 24,
+    "email": "karan.mehta@example.com",
+    "course": "Civil Engineering"
+  },
+  {
+    "name": "Neha Singh",
+    "age": 22,
+    "email": "neha.singh@example.com",
+    "course": "Computer Science"
+  },
+  {
+    "name": "Arjun Nair",
+    "age": 23,
+    "email": "arjun.nair@example.com",
+    "course": "Information Technology"
+  },
+  {
+    "name": "Pooja Desai",
+    "age": 21,
+    "email": "pooja.desai@example.com",
+    "course": "Electrical Engineering"
+  },
+  {
+    "name": "Rohan Gupta",
+    "age": 25,
+    "email": "rohan.gupta@example.com",
+    "course": "Mechanical Engineering"
+  },
+  {
+    "name": "Anjali Joshi",
+    "age": 20,
+    "email": "anjali.joshi@example.com",
+    "course": "Computer Science"
+  }
+]
