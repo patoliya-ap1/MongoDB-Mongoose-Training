@@ -1,46 +1,21 @@
 import express from "express";
-import mongoose from "mongoose";
+
 import dotenv from "dotenv";
 import { StudentModel } from "./models/Student";
+import { initializeDatabase } from "./db/config/db.connect";
+import { mainRouter } from "./routes/index-routes";
 
 dotenv.config();
 const app = express();
 
-mongoose
-  .connect(process.env.MONGO_URI || "mongodb://localhost:27017/mongodb")
-  .then(() => console.log("Connected to MongoDB"))
-  .catch((err) => console.error(err));
+initializeDatabase();
 
-// queries
-//Fetch all students in a specific course
+// read req body
 
-async function fetchStudentsByCourse(course: string) {
-  const students = await StudentModel.find({ course });
-  console.log(students);
-}
-//fetchStudentsByCourse("Electronics");
+app.use(express.json());
 
-// Update a student’s email.
+// main routes
 
-async function updateStudentsEmail(studentId: string, updateEmail: string) {
-  const updatedStudentEmail = await StudentModel.findByIdAndUpdate(
-    { _id: studentId },
-    { email: updateEmail },
-    { returnDocument: "after" },
-  );
-  console.log(updatedStudentEmail);
-}
-//updateStudentsEmail("69ba89c1a15ac856db4c3a36", "neha@gmail.com");
-
-// Delete a student by name.
-
-async function deleteStudentByName(studentName: string) {
-  const deletedStudent = await StudentModel.findOneAndDelete({
-    name: studentName,
-  });
-  console.log(deletedStudent);
-}
-
-// deleteStudentByName("Arjun Nair");
+app.use(mainRouter);
 
 app.listen(3000, () => console.log("Server running on port 3000"));
