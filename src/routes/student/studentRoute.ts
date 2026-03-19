@@ -11,9 +11,7 @@ export const studentRouter = express.Router();
 studentRouter.get("/", getStudents);
 
 // Update a student’s email.
-
 studentRouter.put("/:id", updateStudent);
 
 // Delete a student by name.
-
 studentRouter.delete("/", deleteStudent);

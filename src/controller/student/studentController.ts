@@ -30,43 +30,57 @@ export const getStudents = async (req: Request, res: Response) => {
 };
 
 /**
- * Fetch students optionally filtered by course
+ * Update a student by ID
  *
- * @route GET /api/students
- * @query {string} [course] - Filter students by course name
+ * @route PUT /api/students/:id
  *
- * @param req - Express request object
- * @param res - Express response object
+ * @param  req - Express request object
+ * @param {string} req.params.id - ID of the student to update
+ * @param {Object} req.body - Data to update the student with
  *
- * @returns {Promise<void>} Sends a JSON response containing list of students
+ * @param  res - Express response object
+ *
+ * @returns {Promise<void>} Sends updated student data in JSON response
+ *
  *
  */
 export const updateStudent = async (req: Request, res: Response) => {
-  const course = req.query.course as string;
+  const studentId = req.params.id;
+  const updateData = req.body;
 
-  const filterObject: CourseQuery = {};
-  if (course) {
-    filterObject.course = course;
-  }
-  const students = await StudentModel.find(filterObject);
+  const updatedStudent = await StudentModel.findByIdAndUpdate(
+    studentId,
+    updateData,
+    { returnDocument: "after" },
+  );
   res.status(200).json({
     success: true,
     message: "students updated successfully.",
-    students,
+    updatedStudent,
   });
 };
 
+/**
+ * Delete a student by name
+ *
+ * @route DELETE /api/students/:name
+ *
+ * @param  req - Express request object
+ * @param {string} req.params.name - name of the student for delete
+ *
+ * @param  res - Express response object
+ *
+ * @returns {Promise<void>} Sends deleted student data in JSON response
+ *
+ *
+ */
 export const deleteStudent = async (req: Request, res: Response) => {
-  const course = req.query.course as string;
+  const name = req.params.name;
 
-  const filterObject: CourseQuery = {};
-  if (course) {
-    filterObject.course = course;
-  }
-  const students = await StudentModel.find(filterObject);
+  const deletedStudent = await StudentModel.findOneAndDelete({ name });
   res.status(200).json({
     success: true,
     message: "students deleted successfully.",
-    students,
+    deletedStudent,
   });
 };
