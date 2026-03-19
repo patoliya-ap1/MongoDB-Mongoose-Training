@@ -1,5 +1,6 @@
 import mongoose, { Schema } from "mongoose";
 
+// user schema
 const userSchema = new mongoose.Schema({
   name: { type: String, required: [true, "name is require."] },
   email: {
@@ -16,4 +17,5 @@ const userSchema = new mongoose.Schema({
   borrowedBooks: [{ type: Schema.Types.ObjectId, ref: "books" }],
 });
 
+// user model
 export const UserModel = mongoose.model("book-users", userSchema);

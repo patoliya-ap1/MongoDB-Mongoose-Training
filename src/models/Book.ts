@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 
+// book schema
 const bookSchema = new mongoose.Schema({
   title: { type: String, required: [true, "title is require."] },
   author: { type: String, required: [true, "author is require."] },
@@ -11,4 +12,5 @@ const bookSchema = new mongoose.Schema({
   },
 });
 
+// book model
 export const BookModel = mongoose.model("books", bookSchema);
