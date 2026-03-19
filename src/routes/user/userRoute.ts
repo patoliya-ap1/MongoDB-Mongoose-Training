@@ -1,5 +1,5 @@
 import express from "express";
-import { UserModel } from "../../models/User";
+import { UserModel } from "../../models/user.model";
 import { FilterForUsers } from "../../utility/types";
 
 export const userRouter = express.Router();
