@@ -1,0 +1,62 @@
+[
+  {
+    "title": "The Silent Forest",
+    "author": "Arjun Mehta",
+    "category": "Fiction",
+    "price": 299
+  },
+  {
+    "title": "Mastering Node.js",
+    "author": "Riya Sharma",
+    "category": "Technology",
+    "price": 499
+  },
+  {
+    "title": "The Art of Mindfulness",
+    "author": "Kabir Das",
+    "category": "Self-help",
+    "price": 250
+  },
+  {
+    "title": "History of Ancient India",
+    "author": "Sanjay Kulkarni",
+    "category": "History",
+    "price": 350
+  },
+  {
+    "title": "Cooking Made Easy",
+    "author": "Neha Verma",
+    "category": "Cooking",
+    "price": 199
+  },
+  {
+    "title": "The Space Odyssey",
+    "author": "Vikram Rao",
+    "category": "Science Fiction",
+    "price": 450
+  },
+  {
+    "title": "Financial Freedom Guide",
+    "author": "Ankit Shah",
+    "category": "Finance",
+    "price": 399
+  },
+  {
+    "title": "The Power of Habit",
+    "author": "Suresh Iyer",
+    "category": "Self-help",
+    "price": 320
+  },
+  {
+    "title": "Learning Python Basics",
+    "author": "Priya Nair",
+    "category": "Technology",
+    "price": 550
+  },
+  {
+    "title": "Travel Diaries: Europe",
+    "author": "Rahul Kapoor",
+    "category": "Travel",
+    "price": 280
+  }
+]
