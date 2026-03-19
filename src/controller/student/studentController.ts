@@ -1,4 +1,4 @@
-import { StudentModel } from "../../models/Student";
+import { StudentModel } from "../../models/student.model";
 import { CourseQuery } from "../../utility/types";
 import { Request, Response } from "express";
 
