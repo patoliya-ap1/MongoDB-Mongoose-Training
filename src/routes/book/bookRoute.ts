@@ -1,5 +1,5 @@
 import express from "express";
-import { BookModel } from "../../models/Book";
+import { BookModel } from "../../models/book.model";
 import { FilterForBooks } from "../../utility/types";
 
 export const bookRouter = express.Router();
