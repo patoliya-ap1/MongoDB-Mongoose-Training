@@ -1,6 +1,7 @@
 import { BookModel } from "../../models/book.model";
 import { FilterForBooks } from "../../utility/types";
 import { Request, Response } from "express";
+import { UserModel } from "../../models/user.model";
 
 /**
  * Create books
@@ -79,5 +80,36 @@ export const getBooksAveragePerCategory = async (
     success: "true",
     message: "books average price successfully",
     books,
+  });
+};
+
+/**
+ * Fetch books optionally filtered by category
+ *
+ * @route PUT /books/borrow-book/:id
+ * @query {string} [category] - Filter user by category
+ *
+ * @param req - Express request object
+ * @param res - Express response object
+ *
+ * @returns {Promise<void>} Sends a JSON response containing list of borrowed books
+ *
+ */
+export const borrowedBooks = async (req: Request, res: Response) => {
+  const bookId = req.params.id;
+  const { userId } = req.body;
+
+  const updatedUser = await UserModel.findByIdAndUpdate(
+    userId,
+    {
+      $push: { borrowedBooks: bookId },
+    },
+    { returnDocument: "after" },
+  );
+
+  res.status(200).json({
+    success: true,
+    message: "book borrowed successfully.",
+    updatedUser,
   });
 };
