@@ -145,6 +145,7 @@ export const borrowedBooks = async (
     const { userId } = req.body;
 
     const bookAlreadyExist = await UserModel.findOne({
+      _id: userId,
       borrowedBooks: { $in: [bookId] },
     });
 
