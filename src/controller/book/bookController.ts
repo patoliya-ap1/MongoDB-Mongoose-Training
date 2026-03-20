@@ -1,5 +1,5 @@
 import { BookModel } from "../../models/book.model";
-import { FilterForBooks } from "../../utility/types";
+import { FilterForBooks, SortForBooks } from "../../utility/types";
 import { NextFunction, Request, Response } from "express";
 import { UserModel } from "../../models/user.model";
 import { AppError } from "../../utility/AppError";
@@ -59,13 +59,22 @@ export const getBooks = async (
   next: NextFunction,
 ) => {
   const category = req.query.category as string;
+  const sortByPrice = req.query.sortByPrice as string;
+  const sortByTitle = req.query.sortByPrice as string;
   try {
     const filterObj: FilterForBooks = {};
+    const sortObject: Record<string, 1 | -1> = {};
 
     if (category) {
       filterObj.category = category;
     }
-    const books = await BookModel.find(filterObj);
+    if (sortByPrice) {
+      sortObject.price = sortByPrice == "desc" ? -1 : 1;
+    }
+    if (sortByTitle) {
+      sortObject.title = sortByTitle == "desc" ? -1 : 1;
+    }
+    const books = await BookModel.find(filterObj).sort(sortObject);
 
     // if error while fetching book
     if (!books) {
@@ -118,6 +127,47 @@ export const getBooksAveragePerCategory = async (
       success: "true",
       message: "books average price successfully",
       books,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+/**
+ * Fetch books count  per category
+ *
+ * @route GET /books/categories/count-books
+ *
+ * @param req - Express request object
+ * @param res - Express response object
+ *
+ * @returns {Promise<void>} Sends a JSON response containing books counts per category
+ *
+ */
+export const countBooksPerCategory = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
+  try {
+    const booksCount = await BookModel.aggregate([
+      { $group: { _id: "$category", books: { $sum: 1 } } },
+      { $project: { category: "$_id", _id: 0, books: 1 } },
+    ]);
+
+    // error while fetching books count per category
+    if (!booksCount) {
+      const err = new AppError(
+        "error while fetching books count per category",
+        400,
+      );
+      return next(err);
+    }
+
+    res.status(201).json({
+      success: "true",
+      message: "books count fetched successfully",
+      booksCount,
     });
   } catch (error) {
     next(error);
