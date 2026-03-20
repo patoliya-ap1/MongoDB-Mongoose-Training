@@ -1,6 +1,7 @@
 import express from "express";
 import {
   borrowedBooks,
+  countBooksPerCategory,
   createBook,
   getBooks,
   getBooksAveragePerCategory,
@@ -17,6 +18,8 @@ bookRouter.get("/", getBooks);
 //  books average price per category
 bookRouter.get("/categories/average-price", getBooksAveragePerCategory);
 
-// borrowed book
+//  count books per category
+bookRouter.get("/categories/count-books", countBooksPerCategory);
 
+// borrowed book
 bookRouter.put("/borrow-book/:id", borrowedBooks);

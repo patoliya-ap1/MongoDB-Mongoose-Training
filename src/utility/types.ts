@@ -9,3 +9,8 @@ export interface FilterForUsers {
 export interface FilterForBooks {
   category?: string;
 }
+
+export interface SortForBooks {
+  price?: number;
+  name?: number;
+}
