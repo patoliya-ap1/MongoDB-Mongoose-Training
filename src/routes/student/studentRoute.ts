@@ -1,11 +1,15 @@
 import express from "express";
 import {
+  createStudents,
   deleteStudent,
   getStudents,
   updateStudent,
 } from "../../controller/student/studentController";
 
 export const studentRouter = express.Router();
+
+// create students
+studentRouter.post("/", createStudents);
 
 // Fetch all students in a specific course
 studentRouter.get("/", getStudents);
