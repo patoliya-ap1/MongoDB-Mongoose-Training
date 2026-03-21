@@ -5,11 +5,13 @@ import {
   getStudents,
   updateStudent,
 } from "../../controller/student/studentController";
+import { zodValidate } from "../../middleware/zodMiddleware";
+import { studentSchema } from "../../schemas/student.schema";
 
 export const studentRouter = express.Router();
 
 // create students
-studentRouter.post("/", createStudents);
+studentRouter.post("/", zodValidate(studentSchema), createStudents);
 
 // Fetch all students in a specific course
 studentRouter.get("/", getStudents);
