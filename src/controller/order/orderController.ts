@@ -1,4 +1,5 @@
 import { OrderModel } from "../../models/order.model";
+import { ProductModel } from "../../models/products.model";
 import { AppError } from "../../utility/AppError";
 import { NextFunction, Request, Response } from "express";
 
@@ -20,7 +21,15 @@ export const createOrder = async (
 ) => {
   const orderData = req.body;
   try {
-    const newOrder = new OrderModel(orderData);
+    const isProductExist = await ProductModel.findById(orderData.productId);
+    if (!isProductExist) {
+      const err = new AppError("product not found for placing order", 404);
+      return next(err);
+    }
+    const newOrder = new OrderModel({
+      ...orderData,
+      totalPrice: isProductExist?.price * orderData.quantity,
+    });
     const savedOrder = await newOrder.save();
     res.status(200).json({
       success: true,
