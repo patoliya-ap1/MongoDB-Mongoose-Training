@@ -23,7 +23,7 @@ const orderSchema = new mongoose.Schema(
     },
     date: {
       type: Date,
-      default: new Date(Date.now()).toLocaleDateString("en-IN"),
+      default: Date.now,
       required: [true, "date is required"],
     },
   },
