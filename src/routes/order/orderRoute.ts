@@ -4,6 +4,7 @@ import {
   deleteOrder,
   getOrder,
   updateOrder,
+  totalRevenuePerCategory,
 } from "../../controller/order/orderController";
 
 export const orderRouter = express.Router();
@@ -19,3 +20,6 @@ orderRouter.put("/:id", updateOrder);
 
 // Delete a order by id.
 orderRouter.delete("/:id", deleteOrder);
+
+// total revenue per category
+orderRouter.get("/total-revenue-per-category", totalRevenuePerCategory);
