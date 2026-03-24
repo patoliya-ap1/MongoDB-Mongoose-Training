@@ -80,6 +80,62 @@ export const getOrder = async (
 };
 
 /**
+ * Fetch revenue per category
+ *
+ * @route GET /orders/total-revenue-per-category
+ *
+ * @param req - Express request object
+ * @param res - Express response object
+ *
+ * @returns {Promise<void>} Sends a JSON response revenue per category
+ *
+ */
+export const totalRevenuePerCategory = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
+  try {
+    const revenuePerCategory = await OrderModel.aggregate([
+      {
+        $lookup: {
+          from: "products",
+          localField: "productId",
+          foreignField: "_id",
+          as: "productDetails",
+        },
+      },
+      { $unwind: "$productDetails" },
+      {
+        $group: {
+          _id: "$productDetails.category",
+          totalRevenue: {
+            $sum: { $multiply: ["$quantity", "$productDetails.price"] },
+          },
+          orderCount: { $sum: 1 },
+        },
+      },
+    ]);
+
+    if (!revenuePerCategory) {
+      const err = new AppError(
+        "error while calculating revenue per category",
+        400,
+      );
+      return next(err);
+    }
+
+    res.status(200).json({
+      success: true,
+      message: "total revenue per category fetched successfully.",
+      revenuePerCategory,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+/**
  * Update a order by ID
  *
  * @route PUT order/:id
