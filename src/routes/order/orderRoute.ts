@@ -8,11 +8,12 @@ import {
   mostSoldProducts,
   dailySalesReport,
 } from "../../controller/order/orderController";
+import { authMiddleware } from "../../middleware/authMiddleware";
 
 export const orderRouter = express.Router();
 
 // create order
-orderRouter.post("/", createOrder);
+orderRouter.post("/:id", authMiddleware, createOrder);
 
 // Fetch all order
 orderRouter.get("/", getOrder);
