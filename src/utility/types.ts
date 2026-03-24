@@ -14,3 +14,9 @@ export interface SortForBooks {
   price?: number;
   name?: number;
 }
+
+export interface TransactionParams {
+  userId: string;
+  productId: string;
+  quantity: number;
+}
