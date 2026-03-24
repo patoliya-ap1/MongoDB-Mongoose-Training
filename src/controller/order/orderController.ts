@@ -136,6 +136,105 @@ export const totalRevenuePerCategory = async (
 };
 
 /**
+ * Fetch most sold products
+ *
+ * @route GET /orders/most-sold-product
+ *
+ * @param req - Express request object
+ * @param res - Express response object
+ *
+ * @returns {Promise<void>} Sends a JSON response most sold products
+ *
+ */
+export const mostSoldProducts = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
+  try {
+    const soldProducts = await OrderModel.aggregate([
+      {
+        $group: {
+          _id: "$productId",
+          totalSold: { $sum: "$quantity" },
+        },
+      },
+      {
+        $sort: { totalSold: -1 },
+      },
+      {
+        $limit: 3,
+      },
+    ]);
+
+    if (!soldProducts) {
+      const err = new AppError(
+        "error while fetching top 3 most sold products",
+        400,
+      );
+      return next(err);
+    }
+
+    res.status(200).json({
+      success: true,
+      message: "top 3 most sold products fetched successfully.",
+      soldProducts,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+/**
+ * Fetch daily sales report
+ *
+ * @route GET /orders/sales-report
+ *
+ * @param req - Express request object
+ * @param res - Express response object
+ *
+ * @returns {Promise<void>} Sends a JSON response daily sales reports
+ *
+ */
+export const dailySalesReport = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
+  try {
+    const salesReport = await OrderModel.aggregate([
+      {
+        $group: {
+          _id: {
+            $dateToString: { format: "%d-%m-%Y", date: "$date" },
+          },
+          totalQuantity: { $sum: "$quantity" },
+          totalRevenue: { $sum: "$totalPrice" },
+          uniqueUsers: { $addToSet: "$userId" },
+          totalOrders: { $sum: 1 },
+        },
+      },
+      {
+        $sort: { _id: -1 },
+      },
+    ]);
+
+    if (!salesReport) {
+      const err = new AppError("error while calculating daily sales", 400);
+      return next(err);
+    }
+
+    res.status(200).json({
+      success: true,
+      message: "daily sales report fetched successfully.",
+      salesReport,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+/**
  * Update a order by ID
  *
  * @route PUT order/:id
