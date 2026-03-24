@@ -4,6 +4,7 @@ import { userRouter } from "./user/userRoute";
 import { bookRouter } from "./book/bookRoute";
 import { productRouter } from "./product/productRoute";
 import { orderRouter } from "./order/orderRoute";
+import { authRouter } from "./auth/authRoute";
 
 export const mainRouter = express.Router();
 
@@ -12,6 +13,9 @@ mainRouter.use("/students", studentRouter);
 
 // users route
 mainRouter.use("/users", userRouter);
+
+// auth route
+mainRouter.use("/auth", authRouter);
 
 // books route
 mainRouter.use("/books", bookRouter);

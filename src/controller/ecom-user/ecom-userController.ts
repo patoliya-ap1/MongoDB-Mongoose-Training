@@ -2,6 +2,7 @@ import { EcomUserModel } from "../../models/ecom-user.model";
 import { AppError } from "../../utility/AppError";
 import { FilterForUsers } from "../../utility/types";
 import { NextFunction, Request, Response } from "express";
+import bcrypt from "bcryptjs";
 
 /**
  * Fetch ecom users optionally filtered by email
@@ -49,12 +50,12 @@ export const getUsers = async (
 /**
  * Create user
  *
- * @route POST /users
+ * @route POST /auth/signup
  *
  * @param req - Express request object
  * @param res - Express response object
  *
- * @returns {Promise<void>} Sends a JSON response new user
+ * @returns {Promise<void>} Sends a JSON response message
  *
  */
 export const createUsers = async (
@@ -62,10 +63,17 @@ export const createUsers = async (
   res: Response,
   next: NextFunction,
 ) => {
-  const userData = req.body;
-
+  const { password, ...rest } = req.body;
   try {
-    const newUser = new EcomUserModel(userData);
+    if (!password || !password?.trim()) {
+      const err = new AppError("password is required", 400);
+      return next(err);
+    }
+
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(password, salt);
+
+    const newUser = new EcomUserModel({ ...rest, password: hashedPassword });
     const savedUser = await newUser.save();
 
     if (!savedUser) {
@@ -76,7 +84,6 @@ export const createUsers = async (
     res.status(201).json({
       success: "true",
       message: "new user created successfully",
-      newUser: savedUser,
     });
   } catch (error) {
     next(error);
