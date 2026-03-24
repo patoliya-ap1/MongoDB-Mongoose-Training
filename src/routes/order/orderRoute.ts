@@ -5,6 +5,8 @@ import {
   getOrder,
   updateOrder,
   totalRevenuePerCategory,
+  mostSoldProducts,
+  dailySalesReport,
 } from "../../controller/order/orderController";
 
 export const orderRouter = express.Router();
@@ -23,3 +25,9 @@ orderRouter.delete("/:id", deleteOrder);
 
 // total revenue per category
 orderRouter.get("/total-revenue-per-category", totalRevenuePerCategory);
+
+// top 3 most sold products
+orderRouter.get("/most-sold-product", mostSoldProducts);
+
+// daily sales report
+orderRouter.get("/sales-report", dailySalesReport);
