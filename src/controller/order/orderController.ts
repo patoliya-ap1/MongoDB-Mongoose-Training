@@ -6,7 +6,7 @@ import { createOrderService } from "../../utility/transactions";
 /**
  * create order
  *
- * @route POST order
+ * @route POST /orders/:productId
  *
  * @param req - Express request object
  * @param res - Express response object
@@ -21,7 +21,9 @@ export const createOrder = async (
   next: NextFunction,
 ) => {
   try {
-    const { userId, productId, quantity } = req.body;
+    const productId = req.params.id as string;
+    const userId = req.userId as string;
+    const { quantity } = req.body;
 
     const order = await createOrderService({
       userId,
