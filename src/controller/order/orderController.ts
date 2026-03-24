@@ -150,8 +150,19 @@ export const mostSoldProducts = async (
   try {
     const soldProducts = await OrderModel.aggregate([
       {
+        $lookup: {
+          from: "products",
+          localField: "productId",
+          foreignField: "_id",
+          as: "product",
+        },
+      },
+      {
+        $unwind: "$product",
+      },
+      {
         $group: {
-          _id: "$productId",
+          _id: "$product.name",
           totalSold: { $sum: "$quantity" },
         },
       },
@@ -200,14 +211,49 @@ export const dailySalesReport = async (
   try {
     const salesReport = await OrderModel.aggregate([
       {
+        $lookup: {
+          from: "ecom-users",
+          localField: "userId",
+          foreignField: "_id",
+          as: "user",
+        },
+      },
+      {
+        $lookup: {
+          from: "products",
+          localField: "productId",
+          foreignField: "_id",
+          as: "product",
+        },
+      },
+      {
+        $unwind: "$user",
+      },
+      {
+        $unwind: "$product",
+      },
+
+      {
         $group: {
           _id: {
             $dateToString: { format: "%d-%m-%Y", date: "$date" },
           },
           totalQuantity: { $sum: "$quantity" },
           totalRevenue: { $sum: "$totalPrice" },
-          uniqueUsers: { $addToSet: "$userId" },
           totalOrders: { $sum: 1 },
+          orderedProducts: {
+            $addToSet: {
+              _id: "$product._id",
+              name: "$product.name",
+              quantity: { $sum: "$quantity" },
+            },
+          },
+          users: {
+            $push: {
+              _id: "$user._id",
+              username: "$user.username",
+            },
+          },
         },
       },
       {
