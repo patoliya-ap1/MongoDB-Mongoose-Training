@@ -1,7 +1,7 @@
 import { OrderModel } from "../../models/order.model";
-import { ProductModel } from "../../models/products.model";
 import { AppError } from "../../utility/AppError";
 import { NextFunction, Request, Response } from "express";
+import { createOrderService } from "../../utility/transactions";
 
 /**
  * create order
@@ -14,32 +14,26 @@ import { NextFunction, Request, Response } from "express";
  * @returns {Promise<void>} Sends a JSON response containing created order
  *
  */
+
 export const createOrder = async (
   req: Request,
   res: Response,
   next: NextFunction,
 ) => {
-  const orderData = req.body;
   try {
-    const isProductExist = await ProductModel.findById(orderData.productId);
-    if (!isProductExist) {
-      const err = new AppError("product not found for placing order", 404);
-      return next(err);
-    }
-    const newOrder = new OrderModel({
-      ...orderData,
-      totalPrice: isProductExist?.price * orderData.quantity,
+    const { userId, productId, quantity } = req.body;
+
+    const order = await createOrderService({
+      userId,
+      productId,
+      quantity,
     });
-    const savedOrder = await newOrder.save();
-    res.status(200).json({
+
+    res.status(201).json({
       success: true,
-      message: "order created successfully.",
-      newOrder: savedOrder,
+      message: "Order created successfully",
+      data: order,
     });
-    if (!savedOrder) {
-      const err = new AppError("error while creating order", 400);
-      return next(err);
-    }
   } catch (error) {
     next(error);
   }
